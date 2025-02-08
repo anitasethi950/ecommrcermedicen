@@ -68,7 +68,6 @@ class ProductController extends Controller
 
     public function productview()
     {
-
         $products = Product::all();
         return view('productview', compact('products'));
     }

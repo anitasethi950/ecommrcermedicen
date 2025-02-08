@@ -27,3 +27,4 @@ Route::put('products/{id}', [ProductController::class, 'update'])->name('product
 Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::delete('product_images/{id}', [ProductController::class, 'productimagedestroy'])->name('product_images.destroy');
 Route::get('productviewimage/{id}', [ProductController::class, 'productviewimage'])->name('productimage.view');
+Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
