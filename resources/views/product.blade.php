@@ -1,4 +1,145 @@
-<!DOCTYPE html>
+@extends('layout.app')
+
+@section('content')
+    <style>
+        @media (max-width: 767px) {
+            #addCategoryForm {
+                order: 1;
+                /* Show the Add Category form first on mobile */
+            }
+
+            #viewCategoryTable {
+                order: 2;
+                /* View Category table will be second on mobile */
+            }
+
+            /* Make both form and table take full width on mobile */
+            .col-12 {
+                width: 100% !important;
+            }
+
+            /* Optionally, you can add some margin between elements on mobile */
+            .row.g-4 {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <!-- View Category - 70% width -->
+            <div class="col-12 col-md-8" id="viewCategoryTable">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">View Product</h6>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Product Image</th>
+                                    <th scope="col">Actions</th>
+                                    <th scope="col">Publish</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Category Form - 30% width -->
+            <div class="col-12 col-md-4">
+                <div class="bg-secondary rounded h-100 p-4" id="addCategoryForm">
+                    <h6 class="mb-4">Add Category</h6>
+                    <form action="{{ route('category.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="category_name" class="form-label">Category Name:</label>
+                            <input type="text" class="form-control" id="category_name" name="category_name"
+                                aria-describedby="emailHelp" placeholder="Enter Category Name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category_name" class="form-label">Product Name:</label>
+                            <input type="text" class="form-control" id="category_name" name="category_name"
+                                aria-describedby="emailHelp" placeholder="Enter Product Name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category_name" class="form-label">Description:</label>
+                            <input type="text" class="form-control" id="category_name" name="category_name"
+                                aria-describedby="emailHelp" placeholder="Enter Description" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category_name" class="form-label">Price:</label>
+                            <input type="text" class="form-control" id="category_name" name="category_name"
+                                aria-describedby="emailHelp" placeholder="Price" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label">Product Image</label>
+                            <input class="form-control bg-dark" type="file" id="formFileMultiple" multiple>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label">Additional Image</label>
+                            <input class="form-control bg-dark" type="file" id="formFileMultiple" multiple>
+                        </div>
+
+
+
+
+                        <!-- Align Save button to the right -->
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -109,7 +250,8 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Cancel</button>
-                                            <button type="button" id="cropBtn" class="btn btn-primary">Crop</button>
+                                            <button type="button" id="cropBtn"
+                                                class="btn btn-primary">Crop</button>
                                         </div>
                                     </div>
                                 </div>
@@ -191,4 +333,4 @@
     </script>
 </body>
 
-</html>
+</html> --}}

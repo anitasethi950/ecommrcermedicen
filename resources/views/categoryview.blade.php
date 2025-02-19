@@ -1,4 +1,81 @@
-<!DOCTYPE html>
+@extends('layout.app')
+
+@section('content')
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">View Category</h6>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Category Name</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($category as $categorys)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $categorys->category_name }}</td>
+
+                                        <td>
+                                            <!-- Edit Button -->
+                                            <a href="{{ route('category.edit', $categorys->id) }}"
+                                                class="btn btn-sm btn-warning">Edit</a>
+                                            <!-- Delete Form -->
+                                            <form action="{{ route('category.destroy', $categorys->id) }}" method="POST"
+                                                style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <!-- Add any page-specific scripts here -->
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -60,4 +137,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-</html>
+</html> --}}

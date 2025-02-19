@@ -1,3 +1,66 @@
+
+@extends('layout.app')
+
+@section('content')
+   
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+      <div class="col-sm-12 col-xl-6">
+          <div class="bg-secondary rounded h-100 p-4">
+              <h6 class="mb-4">Edit Category</h6>
+              <form action="{{ route('category.update', $category->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                  
+                  <div class="mb-3">
+                      <label for="text" class="form-label">Category Name:</label>
+                      <input type="text" class="form-control"   name="category_name" id="category_name" 
+                          aria-describedby="emailHelp" placeholder="Enter Category Name" required>
+                     
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary"> Update</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+@endsection
+
+@section('scripts')
+    <!-- Add any page-specific scripts here -->
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
