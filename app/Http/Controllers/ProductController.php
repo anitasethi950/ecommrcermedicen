@@ -12,8 +12,9 @@ class ProductController extends Controller
 {
     public function product()
     {
+        $products = Product::all();
         $categories = Category::all();
-        return view('product', compact('categories'));
+        return view('product', compact('categories','products'));
     }
 
     public function productstore(Request $request)
@@ -78,65 +79,10 @@ class ProductController extends Controller
         return view('productedit', compact('product', 'categories'));
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $product = Product::findOrFail($id);
-
-
-    //     $validated = $request->validate([
-    //         'category_id'   => 'required',
-    //         'product_name'  => 'required',
-    //         'description'   => 'required',
-    //         'price'         => 'required|numeric',
-
-    //     ]);
-
-
-    //     if ($request->hasFile('product_image')) {
-    //         $file = $request->file('product_image');
-    //         $file = $request->file('product_image');
-    //         $filename = time() . '_' . $file->getClientOriginalName();
-    //         $path = $file->storeAs('products', $filename, 'public');
-    //         $validated['product_image'] = $path;
-    //     }
-
-    //     foreach ($request->file('images') as $imageFile) {
-    //         $filename = time() . '_' . $imageFile->getClientOriginalName();
-    //         $path = $imageFile->storeAs('product_images', $filename, 'public');
-    //         // Create a new record in the product_images table.
-    //         ProductImage::create([
-    //             'product_id' => $product->id,
-    //             'image'      => $path,
-    //         ]);
-    //     }
-    //     if ($request->hasFile('images')) {
-
-    //         foreach ($product->images as $oldImage) {
-    //             \Storage::disk('public')->delete($oldImage->image);
-    //             $oldImage->delete();
-    //         }
-
-    //         foreach ($request->file('images') as $imageFile) {
-    //             $filename = time() . '_' . $imageFile->getClientOriginalName();
-    //             $path = $imageFile->storeAs('product_images', $filename, 'public');
-    //             ProductImage::create([
-    //                 'product_id' => $product->id,
-    //                 'image'      => $path,
-    //             ]);
-    //         }
-    //     }
-
-
-    //     $product->update($validated);
-
-    //     return redirect()->route('product.view')
-    //         ->with('success', 'Product updated successfully.');
-    // }
+   
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
-        
         $validated = $request->validate([
             'category_id'   => 'required',
             'product_name'  => 'required',

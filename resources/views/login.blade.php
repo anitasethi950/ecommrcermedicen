@@ -69,7 +69,7 @@
                           <div class="d-flex align-items-center justify-content-between mb-4">
                               <div class="form-check">
                                   <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                  <a class="form-check-label" for="exampleCheck1">Forgot Passwordt</a>
+                                  <a class="form-check-label" for="exampleCheck1">Forgot Password</a>
                               </div>
                               
                           </div>
