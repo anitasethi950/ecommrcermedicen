@@ -24,6 +24,54 @@
             }
         }
     </style>
+
+
+    <style>
+        .modal-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            pointer-events: auto;
+            background-color: #14161c !important;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: .3rem;
+            outline: 0;
+        }
+
+
+        .btn-primary {
+            color: #ffffff;
+            background-color: #000000;
+            border-color: #33363c;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #000000;
+            border-color: #000000;
+        }
+    </style>
+
+
+    <style>
+        /* Custom CSS for the dropdown */
+        #productCategory {
+            color: white;
+            background-color: #343a40;
+        }
+
+        #productCategory option {
+            color: white;
+            background-color: #343a40;
+        }
+
+        #productCategory:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+    </style>
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <!-- View Category - 70% width -->
@@ -37,11 +85,11 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Product Name</th>
-                                    <th scope="col">Description</th>
                                     <th scope="col">Price</th>
                                     <th scope="col">Product Image</th>
                                     <th scope="col">Actions</th>
-                                    <th scope="col">Publish</th>
+                                    <th scope="col">Product Detalis</th>
+                                    <th scope="col">Published</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,27 +100,30 @@
 
                                         <td>{{ $product->category ? $product->category->category_name : 'N/A' }}</td>
 
-                                        <!-- Product Name -->
+
                                         <td>{{ $product->product_name }}</td>
-                                        <!-- Description -->
-                                        <td>{{ $product->description }}</td>
-                                        <!-- Price (formatted to 2 decimal places) -->
-                                        <td>{{ number_format($product->price, 2) }}</td>
-                                        <!-- Feature Image -->
+
+                                        <td>₹{{ number_format($product->price, 2) }}</td>
+
+
                                         <td>
                                             @if ($product->product_image)
                                                 <img src="{{ asset('storage/' . $product->product_image) }}"
                                                     alt="{{ $product->product_name }}" style="max-width: 100px;">
                                             @endif
                                         </td>
-                                        <!-- Action Buttons -->
+
                                         <td>
-                                            <!-- Edit Button -->
-                                            <!-- Edit Button with Icon -->
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target="#editProductModal" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
+
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-warning"
+                                                data-bs-toggle="modal" data-bs-target="#editProductModal" type="button"
+                                                id="editButton" data-id="{{ $product->id }}"
+                                                data-name="{{ $product->product_name }}"
+                                                data-category="{{ $product->category_id }}"
+                                                data-price="{{ $product->price }}"
+                                                data-description="{{ $product->description }}"
+                                                data-image="{{ $product->product_image }}">Edit</a>
+
 
 
                                             <!-- Delete Form -->
@@ -98,53 +149,103 @@
                     </div>
                 </div>
             </div>
-
-
-            <!-- Modal -->
-            <!-- Modal -->
             <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog"
                 aria-labelledby="editProductModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="editProductForm" method="POST"
-                            action="{{ route('products.update', ['product' => ':id']) }}">
+                        <form id="editProductForm" method="POST" action="" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="modal-body">
-                                <!-- Input fields for product details -->
+                                <!-- Product Name -->
                                 <div class="form-group">
                                     <label for="productName">Product Name</label>
                                     <input type="text" id="productName" name="product_name" class="form-control"
                                         required>
                                 </div>
+
+                                <!-- Category -->
                                 <div class="form-group">
                                     <label for="productCategory">Category</label>
-                                    <input type="text" id="productCategory" name="category_id" class="form-control"
-                                        required>
+                                    <select id="productCategory" name="category_id" class="form-control" required>
+                                        <option value="">Select Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                @if ($category->id == $product->category_id) selected @endif>
+                                                {{ $category->category_name	 }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
+
+                                <!-- Price -->
                                 <div class="form-group">
                                     <label for="productPrice">Price</label>
                                     <input type="number" id="productPrice" name="price" class="form-control" required>
                                 </div>
+
+                                <!-- Description -->
                                 <div class="form-group">
                                     <label for="productDescription">Description</label>
                                     <textarea id="productDescription" name="description" class="form-control" required></textarea>
                                 </div>
+
+                                <!-- Product Image -->
+                                <div class="form-group">
+                                    <label for="productImage">Product Image</label>
+                                    <input type="file" id="productImage" name="product_image" class="form-control">
+                                    <!-- Display current image if exists -->
+                                    <img id="currentImage" src="" alt="Current Image"
+                                        style="max-width: 100px; margin-top: 10px;">
+                                </div>
+
+                                <!-- Additional Images -->
+                                <div class="form-group">
+                                    <label for="images" class="form-label">Additional Images</label>
+                                    <input type="file" class="form-control" id="images" name="images[]" multiple>
+
+                                    <!-- Display existing additional images if any -->
+                                    <div id="existingImages" class="mt-2 d-flex flex-wrap">
+                                        @if ($product->images && $product->images->count())
+                                            @foreach ($product->images as $img)
+                                                <div class="position-relative me-2 mb-2" id="image_{{ $img->id }}">
+                                                    <img src="{{ asset('storage/' . $img->image) }}"
+                                                        alt="Additional Image" style="max-width: 150px;">
+                                                    <!-- Delete form overlay -->
+                                                    <form action="{{ route('product_images.destroy', $img->id) }}"
+                                                        method="POST" class="position-absolute top-0 end-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Are you sure you want to delete this image?');"
+                                                            style="border-radius:50%; padding:2px 6px;">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>No additional images added yet.</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
 
 
 
@@ -236,6 +337,9 @@
 <!-- Cropper.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <script>
     let cropper;
     const productImageInput = document.getElementById('product_image');
@@ -290,13 +394,14 @@
 <script>
     $(document).ready(function() {
         // Trigger modal open when the "Edit" button is clicked
-        $('a[data-toggle="modal"]').click(function() {
-            // Get the product details from the clicked element (you can customize this)
-            var productId = $(this).data('id');
-            var productName = $(this).data('name');
-            var productCategory = $(this).data('category');
-            var productPrice = $(this).data('price');
-            var productDescription = $(this).data('description');
+        $('#editProductModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var productId = button.data('id'); // Extract product ID from data-id attribute
+            var productName = button.data('name'); // Extract product name from data-name
+            var productCategory = button.data('category'); // Extract category from data-category
+            var productPrice = button.data('price'); // Extract price from data-price
+            var productDescription = button.data('description'); // Extract description
+            var productImage = button.data('image'); // Extract product image URL from data-image
 
             // Populate modal fields with the current product data
             $('#productName').val(productName);
@@ -304,8 +409,42 @@
             $('#productPrice').val(productPrice);
             $('#productDescription').val(productDescription);
 
+            // Set the current product image in the modal
+            if (productImage) {
+                $('#currentImage').attr('src', '/storage/' + productImage);
+            } else {
+                $('#currentImage').attr('src', ''); // Reset if no image
+            }
+
             // Update the form action URL with the correct product ID for the update
             $('#editProductForm').attr('action', '/products/' + productId);
+
+            // Populate existing images dynamically (if any)
+            // We need to ensure these images are displayed correctly when the modal opens
+            var existingImages = button.data('images'); // Array of image URLs
+            var imagesContainer = $('#existingImages');
+            imagesContainer.empty(); // Clear any previous images
+
+            if (existingImages && existingImages.length > 0) {
+                existingImages.forEach(function(imageUrl) {
+                    imagesContainer.append(`
+                    <div class="position-relative me-2 mb-2">
+                        <img src="/storage/${imageUrl}" alt="Additional Image" style="max-width: 150px;">
+                        <form action="/product_images/${imageUrl.id}" method="POST" class="position-absolute top-0 end-0">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this image?');"
+                                    style="border-radius:50%; padding:2px 6px;">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </form>
+                    </div>
+                `);
+                });
+            } else {
+                imagesContainer.append('<p>No additional images added yet.</p>');
+            }
         });
     });
 </script>
